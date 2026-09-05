@@ -5,159 +5,37 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Tic Tac Toe</title>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      margin: 0;
-      background: #0A0A0F;
-      font-family: 'Segoe UI', system-ui, sans-serif;
-      color: #fff;
-      touch-action: manipulation;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      padding: 8px;
-    }
-    .container {
-      width: 100%;
-      max-width: 420px;
-      margin: auto;
-    }
-    .card {
-      background: linear-gradient(180deg, #111118 0%, #0A0A0F 100%);
-      border: 2px solid #2A2A35;
-      border-radius: 18px;
-      padding: 14px 16px 16px;
-      box-shadow: 0 0 25px rgba(0,140,255,.12);
-    }
-    .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 8px;
-    }
-    .header h1 {
-      font-size: 16px;
-      font-weight: 900;
-      color: #00A2FF;
-      letter-spacing: 0.5px;
-      margin: 0;
-    }
-    .scores {
-      display: flex;
-      gap: 6px;
-      font-size: 11px;
-      font-weight: 700;
-    }
-    .scores span {
-      background: #1F1F29;
-      padding: 0 8px;
-      border-radius: 10px;
-      border: 1px solid #2E2E3A;
-      line-height: 20px;
-    }
-    .scores .w { color: #4ade80; }
-    .scores .l { color: #f87171; }
-    .scores .d { color: #fbbf24; }
-    .turn {
-      text-align: center;
-      font-size: 13px;
-      font-weight: 600;
-      color: #8A8A9E;
-      margin-bottom: 8px;
-    }
-    .turn .hl { color: #fff; }
-    .board {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 6px;
-      aspect-ratio: 1 / 1;
-      width: 100%;
-      max-width: 100%;
-      margin: 0 auto 8px;
-    }
-    .cell {
-      background: #16161F;
-      border: 2px solid #2E2E3A;
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: clamp(1.8rem, 6vw, 2.8rem);
-      font-weight: 900;
-      cursor: pointer;
-      transition: all 0.15s;
-      aspect-ratio: 1 / 1;
-      color: #fff;
-      text-shadow: 0 0 20px currentColor;
-    }
-    .cell:active { transform: scale(0.92); }
-    .cell.x { color: #ff0080; text-shadow: 0 0 30px rgba(255,0,128,0.6); }
-    .cell.o { color: #00aaff; text-shadow: 0 0 30px rgba(0,170,255,0.6); }
-    .cell.win {
-      animation: winPulse 0.8s ease-in-out infinite alternate;
-      border-color: #ffd700;
-      box-shadow: 0 0 30px rgba(255,215,0,0.3);
-    }
-    @keyframes winPulse {
-      from { box-shadow: 0 0 10px rgba(255,215,0,0.2); }
-      to { box-shadow: 0 0 40px rgba(255,215,0,0.6); }
-    }
-    .controls {
-      display: flex;
-      gap: 8px;
-      justify-content: center;
-      margin-top: 4px;
-    }
-    .controls button {
-      background: #1F1F29;
-      border: 1px solid #2E2E3A;
-      border-radius: 10px;
-      padding: 6px 14px;
-      color: #fff;
-      font-weight: 700;
-      font-size: 12px;
-      cursor: pointer;
-      transition: 0.15s;
-      flex: 1;
-      max-width: 100px;
-    }
-    .controls button:active { transform: scale(0.94); }
-    .controls .reset { background: rgba(255,0,128,0.12); border-color: rgba(255,0,128,0.2); color: #ff6b9d; }
-    .controls .new { background: rgba(0,170,255,0.12); border-color: rgba(0,170,255,0.2); color: #6bc8ff; }
-    .status {
-      text-align: center;
-      font-size: 12px;
-      color: #8A8A9E;
-      margin-top: 8px;
-      min-height: 18px;
-    }
-    .status .result { font-weight: 700; color: #fff; animation: pop 0.3s ease; }
-    @keyframes pop {
-      0% { transform: scale(0.8); opacity: 0; }
-      70% { transform: scale(1.05); }
-      100% { transform: scale(1); opacity: 1; }
-    }
-    .footer {
-      text-align: center;
-      font-size: 9px;
-      color: #445;
-      margin-top: 10px;
-      border-top: 1px solid #1a1a2a;
-      padding-top: 8px;
-    }
-    @media (max-width: 480px) {
-      .container { max-width: 100%; padding: 0 4px; }
-      .card { padding: 10px 12px 12px; }
-      .cell { font-size: clamp(1.4rem, 5vw, 2.2rem); }
-      .header h1 { font-size: 14px; }
-      .scores { font-size: 10px; gap: 4px; }
-      .controls button { font-size: 11px; padding: 5px 10px; max-width: 80px; }
-    }
-    @media (max-width: 380px) {
-      .cell { font-size: clamp(1rem, 4vw, 1.6rem); }
-      .controls button { font-size: 10px; padding: 4px 8px; max-width: 70px; }
-    }
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{background:#0A0A0F;display:flex;justify-content:center;align-items:center;min-height:100vh;padding:8px;font-family:'Segoe UI',system-ui,sans-serif;color:#fff;touch-action:manipulation}
+    .container{width:100%;max-width:420px;margin:auto}
+    .card{background:linear-gradient(180deg,#111118 0%,#0A0A0F 100%);border:2px solid #2A2A35;border-radius:18px;padding:12px 14px 14px;box-shadow:0 0 25px rgba(0,140,255,.12)}
+    .header{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+    .header h1{font-size:15px;font-weight:900;color:#00A2FF;letter-spacing:.5px;margin:0}
+    .scores{display:flex;gap:4px;font-size:10px;font-weight:700}
+    .scores span{background:#1F1F29;padding:0 7px;border-radius:8px;border:1px solid #2E2E3A;line-height:18px}
+    .scores .w{color:#4ade80}
+    .scores .l{color:#f87171}
+    .scores .d{color:#fbbf24}
+    .turn{text-align:center;font-size:12px;font-weight:600;color:#8A8A9E;margin-bottom:6px}
+    .turn .hl{color:#fff}
+    .board{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;aspect-ratio:1/1;width:100%;margin:0 auto 6px}
+    .cell{background:#16161F;border:2px solid #2E2E3A;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:clamp(1.6rem,5vw,2.6rem);font-weight:900;cursor:pointer;transition:.15s;aspect-ratio:1/1;color:#fff;text-shadow:0 0 20px currentColor}
+    .cell:active{transform:scale(.92)}
+    .cell.x{color:#ff0080;text-shadow:0 0 30px rgba(255,0,128,.6)}
+    .cell.o{color:#00aaff;text-shadow:0 0 30px rgba(0,170,255,.6)}
+    .cell.win{animation:winPulse .8s ease-in-out infinite alternate;border-color:#ffd700;box-shadow:0 0 30px rgba(255,215,0,.3)}
+    @keyframes winPulse{from{box-shadow:0 0 10px rgba(255,215,0,.2)}to{box-shadow:0 0 40px rgba(255,215,0,.6)}}
+    .controls{display:flex;gap:6px;justify-content:center;margin-top:4px}
+    .controls button{background:#1F1F29;border:1px solid #2E2E3A;border-radius:8px;padding:5px 12px;color:#fff;font-weight:700;font-size:11px;cursor:pointer;transition:.15s;flex:1;max-width:90px}
+    .controls button:active{transform:scale(.94)}
+    .controls .reset{background:rgba(255,0,128,.12);border-color:rgba(255,0,128,.2);color:#ff6b9d}
+    .controls .new{background:rgba(0,170,255,.12);border-color:rgba(0,170,255,.2);color:#6bc8ff}
+    .status{text-align:center;font-size:11px;color:#8A8A9E;margin-top:6px;min-height:16px}
+    .status .result{font-weight:700;color:#fff;animation:pop .3s ease}
+    @keyframes pop{0%{transform:scale(.8);opacity:0}70%{transform:scale(1.05)}100%{transform:scale(1);opacity:1}}
+    .footer{text-align:center;font-size:8px;color:#445;margin-top:8px;border-top:1px solid #1a1a2a;padding-top:6px}
+    @media(max-width:480px){.container{max-width:100%;padding:0 4px}.card{padding:8px 10px 10px}.cell{font-size:clamp(1.2rem,4.5vw,2rem)}.header h1{font-size:13px}.scores{font-size:9px;gap:3px}.controls button{font-size:10px;padding:4px 8px;max-width:70px}}
+    @media(max-width:380px){.cell{font-size:clamp(.9rem,3.8vw,1.4rem)}.controls button{font-size:9px;padding:3px 6px;max-width:60px}}
   </style>
 </head>
 <body>
@@ -193,214 +71,33 @@
 </div>
 <script>
   (function() {
-    // Audio
-    let audioCtx = null;
-    function getAudio() {
-      if (!audioCtx) {
-        try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch(e) { return null; }
-      }
-      if (audioCtx.state === 'suspended') audioCtx.resume().catch(()=>{});
-      return audioCtx;
-    }
-    function playTone(freq, dur, type='sine', vol=0.10) {
-      const ctx = getAudio();
-      if (!ctx) return;
-      try {
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.type = type;
-        osc.frequency.value = freq;
-        gain.gain.setValueAtTime(vol, ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + dur);
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-        osc.start();
-        osc.stop(ctx.currentTime + dur);
-      } catch(e) {}
-    }
-    function sndClick() { playTone(600, 0.06, 'square', 0.07); }
-    function sndWin() { [523,659,784].forEach((f,i)=>setTimeout(()=>playTone(f,0.12,'sine',0.10), i*80)); }
-    function sndLose() { [392,330,262].forEach((f,i)=>setTimeout(()=>playTone(f,0.15,'sawtooth',0.08), i*100)); }
-    function sndDraw() { [440,440,440].forEach((f,i)=>setTimeout(()=>playTone(f,0.10,'square',0.07), i*60)); }
+    let audioCtx=null;
+    function getAudio(){if(!audioCtx){try{audioCtx=new(window.AudioContext||window.webkitAudioContext)()}catch(e){return null}}if(audioCtx.state==='suspended')audioCtx.resume().catch(()=>{});return audioCtx}
+    function playTone(f,d,t='sine',v=.10){const ctx=getAudio();if(!ctx)return;try{const o=ctx.createOscillator(),g=ctx.createGain();o.type=t;o.frequency.value=f;g.gain.setValueAtTime(v,ctx.currentTime);g.gain.exponentialRampToValueAtTime(.001,ctx.currentTime+d);o.connect(g);g.connect(ctx.destination);o.start();o.stop(ctx.currentTime+d)}catch(e){}}
+    function sndClick(){playTone(600,.06,'square',.07)}
+    function sndWin(){[523,659,784].forEach((f,i)=>setTimeout(()=>playTone(f,.12,'sine',.10),i*80))}
+    function sndLose(){[392,330,262].forEach((f,i)=>setTimeout(()=>playTone(f,.15,'sawtooth',.08),i*100))}
+    function sndDraw(){[440,440,440].forEach((f,i)=>setTimeout(()=>playTone(f,.10,'square',.07),i*60))}
 
-    // DOM
-    const cells = document.querySelectorAll('.cell');
-    const turnIndicator = document.getElementById('turnIndicator');
-    const turnName = document.getElementById('turnName');
-    const statusEl = document.getElementById('status');
-    const winsEl = document.getElementById('wins');
-    const lossesEl = document.getElementById('losses');
-    const drawsEl = document.getElementById('draws');
-
-    // State
-    let board = Array(9).fill(null);
-    let currentPlayer = 'X';
-    let gameActive = true;
-    let playerName = 'Player X';
-    let opponentName = 'AI (O)';
-    let scores = { wins: 0, losses: 0, draws: 0 };
-
-    function loadScores() {
-      try {
-        const data = localStorage.getItem('ttt_scores');
-        if (data) { const p = JSON.parse(data); scores = { wins: p.wins||0, losses: p.losses||0, draws: p.draws||0 }; }
-      } catch(e) {}
-      updateScoreUI();
-    }
-    function saveScores() { try { localStorage.setItem('ttt_scores', JSON.stringify(scores)); } catch(e) {} updateScoreUI(); }
-    function updateScoreUI() { winsEl.textContent = scores.wins; lossesEl.textContent = scores.losses; drawsEl.textContent = scores.draws; }
-
-    const winPatterns = [
-      [0,1,2],[3,4,5],[6,7,8],
-      [0,3,6],[1,4,7],[2,5,8],
-      [0,4,8],[2,4,6]
-    ];
-
-    function renderBoard() {
-      cells.forEach((cell, i) => {
-        const val = board[i];
-        cell.textContent = val || '';
-        cell.className = 'cell';
-        if (val === 'X') cell.classList.add('x');
-        else if (val === 'O') cell.classList.add('o');
-      });
-    }
-
-    function checkWinner() {
-      for (let pat of winPatterns) {
-        const [a,b,c] = pat;
-        if (board[a] && board[a] === board[b] && board[a] === board[c]) {
-          return { winner: board[a], pattern: pat };
-        }
-      }
-      if (board.every(v => v !== null)) return { winner: 'draw', pattern: null };
-      return null;
-    }
-
-    function highlightWin(pattern) {
-      if (!pattern) return;
-      pattern.forEach(idx => cells[idx].classList.add('win'));
-    }
-
-    function endGame(result) {
-      gameActive = false;
-      if (result.winner === 'X') {
-        scores.wins++; statusEl.innerHTML = '<span class="result">🏆 You Win! 🎉</span>'; sndWin();
-      } else if (result.winner === 'O') {
-        scores.losses++; statusEl.innerHTML = '<span class="result">💀 You Lose 😢</span>'; sndLose();
-      } else if (result.winner === 'draw') {
-        scores.draws++; statusEl.innerHTML = '<span class="result">🤝 Draw!</span>'; sndDraw();
-      }
-      saveScores();
-      if (result.pattern) highlightWin(result.pattern);
-      updateScoreUI();
-    }
-
-    function makeMove(index) {
-      if (!gameActive) return;
-      if (board[index] !== null) return;
-      if (currentPlayer === 'O') return;
-
-      board[index] = 'X';
-      sndClick();
-      renderBoard();
-
-      const result = checkWinner();
-      if (result) { endGame(result); return; }
-
-      currentPlayer = 'O';
-      turnName.textContent = opponentName;
-      turnIndicator.innerHTML = `❌ <span class="hl">${opponentName}</span>'s turn`;
-      statusEl.textContent = 'AI berpikir...';
-
-      setTimeout(() => {
-        if (!gameActive) return;
-        aiMove();
-      }, 250);
-    }
-
-    function aiMove() {
-      if (!gameActive) return;
-      let best = null;
-
-      for (let i=0; i<9; i++) {
-        if (board[i] === null) {
-          board[i] = 'O';
-          const r = checkWinner();
-          board[i] = null;
-          if (r && r.winner === 'O') { best = i; break; }
-        }
-      }
-      if (best === null) {
-        for (let i=0; i<9; i++) {
-          if (board[i] === null) {
-            board[i] = 'X';
-            const r = checkWinner();
-            board[i] = null;
-            if (r && r.winner === 'X') { best = i; break; }
-          }
-        }
-      }
-      if (best === null && board[4] === null) best = 4;
-      if (best === null) {
-        const empty = board.map((v,i) => v === null ? i : null).filter(v => v !== null);
-        if (empty.length) best = empty[Math.floor(Math.random() * empty.length)];
-      }
-
-      if (best !== null) {
-        board[best] = 'O';
-        sndClick();
-        renderBoard();
-        const r = checkWinner();
-        if (r) { endGame(r); return; }
-        currentPlayer = 'X';
-        turnName.textContent = playerName;
-        turnIndicator.innerHTML = `⭕ <span class="hl">${playerName}</span>'s turn`;
-        statusEl.textContent = 'Giliran kamu';
-      } else {
-        const r = checkWinner();
-        if (r) endGame(r);
-      }
-    }
-
-    function resetBoard() {
-      board = Array(9).fill(null);
-      gameActive = true;
-      currentPlayer = 'X';
-      renderBoard();
-      cells.forEach(c => c.classList.remove('win'));
-      statusEl.innerHTML = 'Klik kotak untuk mulai';
-      turnName.textContent = playerName;
-      turnIndicator.innerHTML = `⭕ <span class="hl">${playerName}</span>'s turn`;
-      const rs = statusEl.querySelector('.result');
-      if (rs) rs.className = '';
-    }
-
-    function resetAll() {
-      scores = { wins: 0, losses: 0, draws: 0 };
-      saveScores();
-      resetBoard();
-    }
-
-    // Events
-    cells.forEach(cell => {
-      cell.addEventListener('click', function() {
-        const idx = parseInt(this.dataset.index);
-        makeMove(idx);
-      });
-    });
-
-    document.getElementById('resetBtn').addEventListener('click', function() { resetBoard(); sndClick(); });
-    document.getElementById('newBtn').addEventListener('click', function() { resetAll(); sndClick(); });
-
-    // Init
-    const urlParams = new URLSearchParams(window.location.search);
-    const name = urlParams.get('name') || 'Player X';
-    playerName = name;
-    loadScores();
-    resetBoard();
-
-    document.addEventListener('click', function() { getAudio(); }, { once: true });
+    const cells=document.querySelectorAll('.cell'),turnIndicator=document.getElementById('turnIndicator'),turnName=document.getElementById('turnName'),statusEl=document.getElementById('status'),winsEl=document.getElementById('wins'),lossesEl=document.getElementById('losses'),drawsEl=document.getElementById('draws');
+    let board=Array(9).fill(null),currentPlayer='X',gameActive=true,playerName='Player X',opponentName='AI (O)',scores={wins:0,losses:0,draws:0};
+    function loadScores(){try{const d=localStorage.getItem('ttt_scores');if(d){const p=JSON.parse(d);scores={wins:p.wins||0,losses:p.losses||0,draws:p.draws||0}}}catch(e){}updateScoreUI()}
+    function saveScores(){try{localStorage.setItem('ttt_scores',JSON.stringify(scores))}catch(e){}updateScoreUI()}
+    function updateScoreUI(){winsEl.textContent=scores.wins;lossesEl.textContent=scores.losses;drawsEl.textContent=scores.draws}
+    const winPatterns=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+    function renderBoard(){cells.forEach((c,i)=>{const v=board[i];c.textContent=v||'';c.className='cell';if(v==='X')c.classList.add('x');else if(v==='O')c.classList.add('o')})}
+    function checkWinner(){for(let p of winPatterns){const[a,b,c]=p;if(board[a]&&board[a]===board[b]&&board[a]===board[c])return{winner:board[a],pattern:p}}if(board.every(v=>v!==null))return{winner:'draw',pattern:null};return null}
+    function highlightWin(p){if(!p)return;p.forEach(i=>cells[i].classList.add('win'))}
+    function endGame(r){gameActive=false;if(r.winner==='X'){scores.wins++;statusEl.innerHTML='<span class="result">🏆 You Win! 🎉</span>';sndWin()}else if(r.winner==='O'){scores.losses++;statusEl.innerHTML='<span class="result">💀 You Lose 😢</span>';sndLose()}else if(r.winner==='draw'){scores.draws++;statusEl.innerHTML='<span class="result">🤝 Draw!</span>';sndDraw()}saveScores();if(r.pattern)highlightWin(r.pattern);updateScoreUI()}
+    function makeMove(i){if(!gameActive)return;if(board[i]!==null)return;if(currentPlayer==='O')return;board[i]='X';sndClick();renderBoard();const r=checkWinner();if(r){endGame(r);return}currentPlayer='O';turnName.textContent=opponentName;turnIndicator.innerHTML='❌ <span class="hl">'+opponentName+'</span>\'s turn';statusEl.textContent='AI berpikir...';setTimeout(()=>{if(!gameActive)return;aiMove()},250)}
+    function aiMove(){if(!gameActive)return;let best=null;for(let i=0;i<9;i++){if(board[i]===null){board[i]='O';const r=checkWinner();board[i]=null;if(r&&r.winner==='O'){best=i;break}}}if(best===null){for(let i=0;i<9;i++){if(board[i]===null){board[i]='X';const r=checkWinner();board[i]=null;if(r&&r.winner==='X'){best=i;break}}}}if(best===null&&board[4]===null)best=4;if(best===null){const empty=board.map((v,i)=>v===null?i:null).filter(v=>v!==null);if(empty.length)best=empty[Math.floor(Math.random()*empty.length)]}if(best!==null){board[best]='O';sndClick();renderBoard();const r=checkWinner();if(r){endGame(r);return}currentPlayer='X';turnName.textContent=playerName;turnIndicator.innerHTML='⭕ <span class="hl">'+playerName+'</span>\'s turn';statusEl.textContent='Giliran kamu'}else{const r=checkWinner();if(r)endGame(r)}}
+    function resetBoard(){board=Array(9).fill(null);gameActive=true;currentPlayer='X';renderBoard();cells.forEach(c=>c.classList.remove('win'));statusEl.innerHTML='Klik kotak untuk mulai';turnName.textContent=playerName;turnIndicator.innerHTML='⭕ <span class="hl">'+playerName+'</span>\'s turn';const rs=statusEl.querySelector('.result');if(rs)rs.className=''}
+    function resetAll(){scores={wins:0,losses:0,draws:0};saveScores();resetBoard()}
+    cells.forEach(c=>{c.addEventListener('click',function(){const idx=parseInt(this.dataset.index);makeMove(idx)})});
+    document.getElementById('resetBtn').addEventListener('click',function(){resetBoard();sndClick()});
+    document.getElementById('newBtn').addEventListener('click',function(){resetAll();sndClick()});
+    const urlParams=new URLSearchParams(window.location.search);const name=urlParams.get('name')||'Player X';playerName=name;loadScores();resetBoard();
+    document.addEventListener('click',function(){getAudio()},{once:true});
   })();
 </script>
 </body>
