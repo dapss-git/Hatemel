@@ -16,9 +16,10 @@
     .scores .w{color:#4ade80}
     .scores .l{color:#f87171}
     .scores .d{color:#fbbf24}
-    .mode-select{display:flex;gap:4px;justify-content:center;margin-bottom:6px}
-    .mode-btn{background:#1F1F29;border:1px solid #2E2E3A;border-radius:8px;padding:3px 10px;color:#8A8A9E;font-weight:700;font-size:10px;cursor:pointer;transition:.15s}
-    .mode-btn.active{background:#00A2FF22;border-color:#00A2FF;color:#00A2FF}
+    /* MODE SELECT - DIPERBESAR DAN DIPERJELAS */
+    .mode-select{display:flex;gap:6px;justify-content:center;margin-bottom:6px;padding:4px 0}
+    .mode-btn{background:#1F1F29;border:2px solid #2E2E3A;border-radius:10px;padding:5px 14px;color:#8A8A9E;font-weight:700;font-size:12px;cursor:pointer;transition:.15s;flex:1;max-width:90px}
+    .mode-btn.active{background:#00A2FF22;border-color:#00A2FF;color:#00A2FF;box-shadow:0 0 15px rgba(0,162,255,.15)}
     .mode-btn:active{transform:scale(.94)}
     .turn{text-align:center;font-size:12px;font-weight:600;color:#8A8A9E;margin-bottom:4px}
     .turn .hl{color:#fff}
@@ -38,7 +39,7 @@
     .status .result{font-weight:700;color:#fff;animation:pop .3s ease}
     @keyframes pop{0%{transform:scale(.8);opacity:0}70%{transform:scale(1.05)}100%{transform:scale(1);opacity:1}}
     .footer{text-align:center;font-size:8px;color:#445;margin-top:6px;border-top:1px solid #1a1a2a;padding-top:5px}
-    /* Ukuran board per mode */
+    /* MODE BOARD */
     .board-3{grid-template-columns:repeat(3,1fr)}
     .board-6{grid-template-columns:repeat(6,1fr);gap:3px}
     .board-9{grid-template-columns:repeat(9,1fr);gap:2px}
@@ -48,15 +49,16 @@
     @media(max-width:480px){
       .container{max-width:100%;padding:0 3px}
       .card{padding:6px 8px 8px}
+      .mode-btn{font-size:11px;padding:4px 10px;max-width:75px}
       .board-3 .cell{font-size:clamp(1.4rem,4.5vw,2.4rem)}
       .board-6 .cell{font-size:clamp(.8rem,2.4vw,1.3rem)}
       .board-9 .cell{font-size:clamp(.5rem,1.4vw,.8rem)}
       .header h1{font-size:13px}
       .scores{font-size:9px;gap:3px}
       .controls button{font-size:10px;padding:3px 8px;max-width:60px}
-      .mode-btn{font-size:9px;padding:2px 8px}
     }
     @media(max-width:380px){
+      .mode-btn{font-size:10px;padding:3px 8px;max-width:65px}
       .board-3 .cell{font-size:clamp(1rem,3.5vw,1.8rem)}
       .board-6 .cell{font-size:clamp(.6rem,1.8vw,1rem)}
       .board-9 .cell{font-size:clamp(.4rem,1vw,.65rem)}
@@ -74,10 +76,11 @@
         <span class="d">🤝 <span id="draws">0</span></span>
       </div>
     </div>
+    <!-- MODE SELECT - TOMBOL 3x3 6x6 9x9 -->
     <div class="mode-select">
-      <button class="mode-btn active" data-size="3">3x3</button>
-      <button class="mode-btn" data-size="6">6x6</button>
-      <button class="mode-btn" data-size="9">9x9</button>
+      <button class="mode-btn active" data-size="3">⬜ 3x3</button>
+      <button class="mode-btn" data-size="6">⬜ 6x6</button>
+      <button class="mode-btn" data-size="9">⬜ 9x9</button>
     </div>
     <div class="turn" id="turnIndicator">⭕ <span class="hl" id="turnName">Player X</span>'s turn</div>
     <div class="board board-3" id="board"></div>
@@ -118,10 +121,9 @@
     function saveScores(){try{localStorage.setItem('ttt_scores',JSON.stringify(scores))}catch(e){}updateScoreUI()}
     function updateScoreUI(){winsEl.textContent=scores.wins;lossesEl.textContent=scores.losses;drawsEl.textContent=scores.draws}
 
-    // Win patterns generator
-    function getWinPatterns(s){const p=[];for(let i=0;i<s;i++){const row=[];for(let j=0;j<s;j++)row.push(i*s+j);p.push(row)}for(let j=0;j<s;j++){const col=[];for(let i=0;i<s;i++)col.push(i*s+j);p.push(col)}const diag1=[];for(let i=0;i<s;i++)diag1.push(i*s+i);p.push(diag1);const diag2=[];for(let i=0;i<s;i++)diag2.push(i*s+(s-1-i));p.push(diag2);return p}
+    function getWinPatterns(s){const p=[];for(let i=0;i<s;i++){const row=[];for(let j=0;j<s;j++)row.push(i*s+j);p.push(row)}for(let j=0;j<s;j++){const col=[];for(let i=0;i<s;i++)col.push(i*s+j);p.push(col)}const d1=[];for(let i=0;i<s;i++)d1.push(i*s+i);p.push(d1);const d2=[];for(let i=0;i<s;i++)d2.push(i*s+(s-1-i));p.push(d2);return p}
 
-    function createBoard(s){board=Array(s*s).fill(null);const cellSize=size;boardEl.className='board board-'+s;boardEl.innerHTML='';for(let i=0;i<s*s;i++){const cell=document.createElement('div');cell.className='cell';cell.dataset.index=i;cell.addEventListener('click',function(){const idx=parseInt(this.dataset.index);makeMove(idx)});boardEl.appendChild(cell)}renderBoard()}
+    function createBoard(s){board=Array(s*s).fill(null);boardEl.className='board board-'+s;boardEl.innerHTML='';for(let i=0;i<s*s;i++){const cell=document.createElement('div');cell.className='cell';cell.dataset.index=i;cell.addEventListener('click',function(){const idx=parseInt(this.dataset.index);makeMove(idx)});boardEl.appendChild(cell)}renderBoard()}
 
     function renderBoard(){const cells=boardEl.children;for(let i=0;i<board.length;i++){const val=board[i];const cell=cells[i];cell.textContent=val||'';cell.className='cell';if(val==='X')cell.classList.add('x');else if(val==='O')cell.classList.add('o');}}
 
@@ -133,17 +135,14 @@
 
     function makeMove(i){if(!gameActive)return;if(board[i]!==null)return;if(currentPlayer==='O')return;board[i]='X';sndClick();renderBoard();const r=checkWinner();if(r){endGame(r);return}currentPlayer='O';turnName.textContent=opponentName;turnIndicator.innerHTML='❌ <span class="hl">'+opponentName+'</span>\'s turn';statusEl.textContent='AI berpikir...';setTimeout(()=>{if(!gameActive)return;aiMove()},250)}
 
-    // AI: cek menang, blok, center/random
-    function aiMove(){if(!gameActive)return;let best=null;const patterns=getWinPatterns(size);const empty=board.map((v,i)=>v===null?i:null).filter(v=>v!==null);if(empty.length===0){const r=checkWinner();if(r)endGame(r);return}
-    // Win
+    function aiMove(){if(!gameActive)return;let best=null;const empty=board.map((v,i)=>v===null?i:null).filter(v=>v!==null);if(empty.length===0){const r=checkWinner();if(r)endGame(r);return}
     for(let i of empty){board[i]='O';const r=checkWinner();board[i]=null;if(r&&r.winner==='O'){best=i;break}}
     if(best===null){for(let i of empty){board[i]='X';const r=checkWinner();board[i]=null;if(r&&r.winner==='X'){best=i;break}}}
-    // Center or random
-    if(best===null){const center=Math.floor(size/2)*size+Math.floor(size/2);if(board[center]===null)best=center}
+    if(best===null){const c=Math.floor(size/2)*size+Math.floor(size/2);if(board[c]===null)best=c}
     if(best===null&&empty.length)best=empty[Math.floor(Math.random()*empty.length)];
     if(best!==null){board[best]='O';sndClick();renderBoard();const r=checkWinner();if(r){endGame(r);return}currentPlayer='X';turnName.textContent=playerName;turnIndicator.innerHTML='⭕ <span class="hl">'+playerName+'</span>\'s turn';statusEl.textContent='Giliran kamu'}else{const r=checkWinner();if(r)endGame(r)}}
 
-    function resetBoard(){board=Array(size*size).fill(null);gameActive=true;currentPlayer='X';renderBoard();boardEl.querySelectorAll('.cell').forEach(c=>c.classList.remove('win'));statusEl.innerHTML='Klik kotak untuk mulai';turnName.textContent=playerName;turnIndicator.innerHTML='⭕ <span class="hl">'+playerName+'</span>\'s turn';const rs=statusEl.querySelector('.result');if(rs)rs.className=''}
+    function resetBoard(){board=Array(size*size).fill(null);gameActive=true;currentPlayer='X';renderBoard();const cells=boardEl.querySelectorAll('.cell');cells.forEach(c=>c.classList.remove('win'));statusEl.innerHTML='Klik kotak untuk mulai';turnName.textContent=playerName;turnIndicator.innerHTML='⭕ <span class="hl">'+playerName+'</span>\'s turn';const rs=statusEl.querySelector('.result');if(rs)rs.className=''}
 
     function resetAll(){scores={wins:0,losses:0,draws:0};saveScores();resetBoard()}
 
