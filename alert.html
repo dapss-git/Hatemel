@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Alert</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background: radial-gradient(ellipse at 50% 0%, #0a0a1a, #000000);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      color: #ffffff;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 420px;
+      padding: 0;
+    }
+
+    .card {
+      background: linear-gradient(145deg, #111122, #0a0a18);
+      border: 2px solid #2a2a4a;
+      border-radius: 28px;
+      padding: 32px 24px 28px;
+      box-shadow: 0 0 60px rgba(0, 200, 255, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle at 30% 20%, rgba(0, 200, 255, 0.05), transparent 60%);
+      pointer-events: none;
+    }
+
+    .neon-glow {
+      position: absolute;
+      top: -20%;
+      left: -20%;
+      width: 140%;
+      height: 140%;
+      background: conic-gradient(from 0deg, transparent, #00aaff22, transparent, #ff00aa22, transparent);
+      filter: blur(40px);
+      animation: spin 6s linear infinite;
+      pointer-events: none;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .icon-wrap {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #ff0080, #ff8c00);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 14px;
+      box-shadow: 0 0 40px rgba(255, 0, 128, 0.4);
+      font-size: 36px;
+      animation: pulse 1.2s ease-in-out infinite;
+      position: relative;
+      z-index: 2;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); box-shadow: 0 0 40px rgba(255, 0, 128, 0.4); }
+      50% { transform: scale(1.08); box-shadow: 0 0 60px rgba(255, 0, 128, 0.8); }
+    }
+
+    .title {
+      font-size: 20px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 4px;
+      letter-spacing: 1px;
+      text-shadow: 0 0 20px rgba(0, 200, 255, 0.3);
+      position: relative;
+      z-index: 2;
+    }
+
+    .subtitle {
+      font-size: 13px;
+      color: #8899bb;
+      margin-bottom: 14px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .msg-box {
+      background: #16162a;
+      border: 1px solid #2a2a4a;
+      border-radius: 14px;
+      padding: 16px 14px;
+      margin: 12px 0 16px;
+      box-shadow: inset 0 0 30px rgba(0, 200, 255, 0.05);
+      position: relative;
+      z-index: 2;
+    }
+
+    .msg-box .msg {
+      font-size: 16px;
+      color: #dde;
+      word-break: break-word;
+      line-height: 1.5;
+      font-weight: 500;
+    }
+
+    .progress-wrap {
+      width: 100%;
+      height: 6px;
+      background: #1f1f2e;
+      border-radius: 10px;
+      overflow: hidden;
+      margin: 10px 0 12px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #ff0080, #ff8c00);
+      border-radius: 10px;
+      transition: width 0.3s ease;
+    }
+
+    .timer {
+      font-size: 15px;
+      color: #ff8c00;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+      margin: 4px 0;
+      position: relative;
+      z-index: 2;
+    }
+
+    .status {
+      font-size: 13px;
+      color: #667;
+      margin-top: 6px;
+      animation: blink 0.8s step-end infinite;
+      position: relative;
+      z-index: 2;
+    }
+
+    .status.done {
+      color: #4ade80;
+      animation: none;
+    }
+
+    @keyframes blink {
+      50% { opacity: 0; }
+    }
+
+    .footer {
+      font-size: 11px;
+      color: #445;
+      margin-top: 14px;
+      border-top: 1px solid #1a1a2a;
+      padding-top: 12px;
+      letter-spacing: 0.3px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .controls {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin-top: 10px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .controls button {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid #2a2a4a;
+      border-radius: 12px;
+      padding: 8px 20px;
+      color: #fff;
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.2s;
+      flex: 1;
+      max-width: 120px;
+    }
+
+    .controls button:hover {
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .controls button:active {
+      transform: scale(0.94);
+    }
+
+    .controls button.stop-btn {
+      background: rgba(255, 0, 0, 0.2);
+      border-color: #ff4444;
+      color: #ff6666;
+    }
+
+    .controls button.stop-btn:hover {
+      background: rgba(255, 0, 0, 0.3);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <div class="neon-glow"></div>
+      <div class="icon-wrap">🔔</div>
+      <div class="title">⏳ Reminder Aktif</div>
+      <div class="subtitle">Alert akan berjalan otomatis</div>
+      <div class="msg-box">
+        <div class="msg" id="alertMessage">Pesan Anda di sini</div>
+      </div>
+      <div class="progress-wrap">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+      <div class="timer" id="timerDisplay">⏱️ Sisa: 0s</div>
+      <div class="status" id="statusDisplay">🔄 Alert berjalan...</div>
+      <div class="controls">
+        <button id="pauseBtn">⏸ Pause</button>
+        <button id="stopBtn" class="stop-btn">⏹ Stop</button>
+      </div>
+      <div class="footer">❌ Alert berhenti saat halaman ditutup</div>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      // Ambil pesan dari parameter URL atau gunakan default
+      const urlParams = new URLSearchParams(window.location.search);
+      const msg = urlParams.get('msg') || '🔔 Peringatan!';
+      document.getElementById('alertMessage').textContent = msg;
+
+      let count = 0;
+      let isPaused = false;
+      let alertInterval = null;
+      let timerInterval = null;
+      let progress = 0;
+      const MAX_PROGRESS = 100;
+
+      const statusEl = document.getElementById('statusDisplay');
+      const timerEl = document.getElementById('timerDisplay');
+      const progressFill = document.getElementById('progressFill');
+      const pauseBtn = document.getElementById('pauseBtn');
+      const stopBtn = document.getElementById('stopBtn');
+
+      function showAlert() {
+        if (!isPaused) {
+          alert(msg);
+          count++;
+          statusEl.textContent = '🔄 Alert berjalan... (' + count + ')';
+        }
+      }
+
+      function updateProgress() {
+        progress = Math.min(progress + 1, MAX_PROGRESS);
+        progressFill.style.width = progress + '%';
+        timerEl.textContent = '⏱️ Sisa: ' + (MAX_PROGRESS - progress) + 's';
+        if (progress >= MAX_PROGRESS) {
+          clearInterval(alertInterval);
+          clearInterval(timerInterval);
+          statusEl.textContent = '✅ Alert selesai! (' + count + ' alert)';
+          statusEl.className = 'status done';
+          pauseBtn.disabled = true;
+          stopBtn.disabled = true;
+        }
+      }
+
+      function startAlert() {
+        if (alertInterval) clearInterval(alertInterval);
+        if (timerInterval) clearInterval(timerInterval);
+        alertInterval = setInterval(showAlert, 300);
+        timerInterval = setInterval(updateProgress, 1000);
+        isPaused = false;
+        pauseBtn.textContent = '⏸ Pause';
+        statusEl.textContent = '🔄 Alert berjalan... (' + count + ')';
+        statusEl.className = 'status';
+      }
+
+      function pauseAlert() {
+        if (isPaused) {
+          // Resume
+          isPaused = false;
+          pauseBtn.textContent = '⏸ Pause';
+          statusEl.textContent = '🔄 Alert berjalan... (' + count + ')';
+          statusEl.className = 'status';
+        } else {
+          isPaused = true;
+          pauseBtn.textContent = '▶️ Resume';
+          statusEl.textContent = '⏸️ Alert dijeda... (' + count + ')';
+          statusEl.className = 'status';
+        }
+      }
+
+      function stopAlert() {
+        clearInterval(alertInterval);
+        clearInterval(timerInterval);
+        alertInterval = null;
+        timerInterval = null;
+        isPaused = false;
+        pauseBtn.textContent = '⏸ Pause';
+        pauseBtn.disabled = true;
+        stopBtn.disabled = true;
+        statusEl.textContent = '⏹️ Alert dihentikan (' + count + ' alert)';
+        statusEl.className = 'status done';
+        progressFill.style.width = '100%';
+        timerEl.textContent = '⏱️ Selesai';
+      }
+
+      // Event listeners
+      pauseBtn.addEventListener('click', pauseAlert);
+      stopBtn.addEventListener('click', stopAlert);
+
+      // Hentikan semua jika user menutup tab
+      window.addEventListener('beforeunload', function() {
+        clearInterval(alertInterval);
+        clearInterval(timerInterval);
+      });
+
+      // Mulai otomatis
+      startAlert();
+    })();
+  </script>
+</body>
+</html>
