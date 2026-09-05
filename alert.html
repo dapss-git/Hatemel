@@ -14,24 +14,21 @@
       -webkit-user-select: none;
       -webkit-tap-highlight-color: transparent;
     }
-
     body {
       background: radial-gradient(ellipse at 50% 0%, #0a0a1a, #000000);
       display: flex;
       justify-content: center;
       align-items: center;
       min-height: 100vh;
-      color: #ffffff;
+      color: #fff;
       margin: 0;
       padding: 20px;
     }
-
     .container {
       width: 100%;
       max-width: 420px;
       padding: 0;
     }
-
     .card {
       background: linear-gradient(145deg, #111122, #0a0a18);
       border: 2px solid #2a2a4a;
@@ -42,7 +39,6 @@
       position: relative;
       overflow: hidden;
     }
-
     .card::before {
       content: '';
       position: absolute;
@@ -53,7 +49,6 @@
       background: radial-gradient(circle at 30% 20%, rgba(0, 200, 255, 0.05), transparent 60%);
       pointer-events: none;
     }
-
     .neon-glow {
       position: absolute;
       top: -20%;
@@ -65,11 +60,9 @@
       animation: spin 6s linear infinite;
       pointer-events: none;
     }
-
     @keyframes spin {
       to { transform: rotate(360deg); }
     }
-
     .icon-wrap {
       width: 72px;
       height: 72px;
@@ -85,12 +78,10 @@
       position: relative;
       z-index: 2;
     }
-
     @keyframes pulse {
       0%, 100% { transform: scale(1); box-shadow: 0 0 40px rgba(255, 0, 128, 0.4); }
       50% { transform: scale(1.08); box-shadow: 0 0 60px rgba(255, 0, 128, 0.8); }
     }
-
     .title {
       font-size: 20px;
       font-weight: 700;
@@ -101,7 +92,6 @@
       position: relative;
       z-index: 2;
     }
-
     .subtitle {
       font-size: 13px;
       color: #8899bb;
@@ -109,7 +99,6 @@
       position: relative;
       z-index: 2;
     }
-
     .msg-box {
       background: #16162a;
       border: 1px solid #2a2a4a;
@@ -120,7 +109,6 @@
       position: relative;
       z-index: 2;
     }
-
     .msg-box .msg {
       font-size: 16px;
       color: #dde;
@@ -128,26 +116,23 @@
       line-height: 1.5;
       font-weight: 500;
     }
-
     .progress-wrap {
       width: 100%;
-      height: 6px;
+      height: 8px;
       background: #1f1f2e;
       border-radius: 10px;
       overflow: hidden;
-      margin: 10px 0 12px;
+      margin: 12px 0 10px;
       position: relative;
       z-index: 2;
     }
-
     .progress-fill {
       height: 100%;
       width: 0%;
       background: linear-gradient(90deg, #ff0080, #ff8c00);
       border-radius: 10px;
-      transition: width 0.3s ease;
+      transition: width 0.25s ease;
     }
-
     .counter {
       font-size: 15px;
       color: #ff8c00;
@@ -157,25 +142,16 @@
       position: relative;
       z-index: 2;
     }
-
     .status {
       font-size: 13px;
-      color: #667;
+      color: #8899bb;
       margin-top: 6px;
-      animation: blink 0.8s step-end infinite;
       position: relative;
       z-index: 2;
     }
-
     .status.done {
       color: #4ade80;
-      animation: none;
     }
-
-    @keyframes blink {
-      50% { opacity: 0; }
-    }
-
     .footer {
       font-size: 11px;
       color: #445;
@@ -186,7 +162,6 @@
       position: relative;
       z-index: 2;
     }
-
     .controls {
       display: flex;
       gap: 10px;
@@ -195,7 +170,6 @@
       position: relative;
       z-index: 2;
     }
-
     .controls button {
       background: rgba(255, 255, 255, 0.08);
       border: 1px solid #2a2a4a;
@@ -209,25 +183,20 @@
       flex: 1;
       max-width: 120px;
     }
-
     .controls button:hover {
       background: rgba(255, 255, 255, 0.15);
     }
-
     .controls button:active {
       transform: scale(0.94);
     }
-
     .controls button.stop-btn {
       background: rgba(255, 0, 0, 0.2);
       border-color: #ff4444;
       color: #ff6666;
     }
-
     .controls button.stop-btn:hover {
       background: rgba(255, 0, 0, 0.3);
     }
-
     .controls button:disabled {
       opacity: 0.4;
       cursor: not-allowed;
@@ -247,7 +216,7 @@
       <div class="progress-wrap">
         <div class="progress-fill" id="progressFill"></div>
       </div>
-      <div class="counter" id="counterDisplay">0 / 30</div>
+      <div class="counter" id="counterDisplay">0 / 20</div>
       <div class="status" id="statusDisplay">🔄 Alert berjalan...</div>
       <div class="controls">
         <button id="pauseBtn">⏸ Pause</button>
@@ -261,15 +230,15 @@
     (function() {
       const urlParams = new URLSearchParams(window.location.search);
       const msg = urlParams.get('msg') || '🔔 Peringatan!';
-      const maxAlerts = parseInt(urlParams.get('max')) || 30;
+      const maxAlerts = parseInt(urlParams.get('max')) || 20;
 
       document.getElementById('alertMessage').textContent = msg;
 
       let count = 0;
       let isPaused = false;
       let isDone = false;
-      let alertInterval = null;
-      let timerInterval = null;
+      let alertTimer = null;
+      let progressTimer = null;
 
       const statusEl = document.getElementById('statusDisplay');
       const counterEl = document.getElementById('counterDisplay');
@@ -281,6 +250,21 @@
         const pct = Math.min((count / maxAlerts) * 100, 100);
         progressFill.style.width = pct + '%';
         counterEl.textContent = count + ' / ' + maxAlerts;
+        if (count >= maxAlerts) {
+          statusEl.textContent = '✅ Selesai! (' + count + ' alert)';
+          statusEl.className = 'status done';
+          pauseBtn.disabled = true;
+          stopBtn.disabled = true;
+          isDone = true;
+          if (alertTimer) clearTimeout(alertTimer);
+          if (progressTimer) clearInterval(progressTimer);
+          // Kirim sinyal selesai
+          if (window.parent) {
+            window.parent.postMessage({ type: 'alert_done', count: count }, '*');
+          }
+        } else {
+          statusEl.textContent = '🔄 Alert berjalan... (' + count + '/' + maxAlerts + ')';
+        }
       }
 
       function showAlert() {
@@ -288,31 +272,32 @@
         alert(msg);
         count++;
         updateUI();
-        statusEl.textContent = '🔄 Alert berjalan... (' + count + '/' + maxAlerts + ')';
         if (count >= maxAlerts) {
+          // Selesai, stop semua
+          if (alertTimer) clearTimeout(alertTimer);
+          if (progressTimer) clearInterval(progressTimer);
           isDone = true;
-          clearInterval(alertInterval);
-          clearInterval(timerInterval);
-          statusEl.textContent = '✅ Alert selesai! (' + count + ' alert)';
-          statusEl.className = 'status done';
-          pauseBtn.disabled = true;
-          stopBtn.disabled = true;
-          progressFill.style.width = '100%';
-          // Kirim sinyal selesai ke parent (akan dihapus oleh bot)
-          if (window.parent) {
-            window.parent.postMessage({ type: 'alert_done', count: count }, '*');
-          }
+          updateUI();
+          return;
         }
+        // Jadwalkan alert berikutnya
+        alertTimer = setTimeout(showAlert, 350);
       }
 
       function startAlert() {
-        if (alertInterval) clearInterval(alertInterval);
-        alertInterval = setInterval(showAlert, 350);
+        if (alertTimer) clearTimeout(alertTimer);
+        if (progressTimer) clearInterval(progressTimer);
         isPaused = false;
         pauseBtn.textContent = '⏸ Pause';
         statusEl.textContent = '🔄 Alert berjalan... (' + count + '/' + maxAlerts + ')';
         statusEl.className = 'status';
         updateUI();
+        // Mulai alert pertama segera
+        if (count < maxAlerts) {
+          alertTimer = setTimeout(showAlert, 100);
+        }
+        // Progress bar update per detik
+        progressTimer = setInterval(updateUI, 500);
       }
 
       function togglePause() {
@@ -322,26 +307,30 @@
           pauseBtn.textContent = '⏸ Pause';
           statusEl.textContent = '🔄 Alert berjalan... (' + count + '/' + maxAlerts + ')';
           statusEl.className = 'status';
-          alertInterval = setInterval(showAlert, 350);
+          // Lanjutkan alert
+          if (count < maxAlerts) {
+            alertTimer = setTimeout(showAlert, 100);
+          }
+          progressTimer = setInterval(updateUI, 500);
         } else {
           isPaused = true;
           pauseBtn.textContent = '▶️ Resume';
-          statusEl.textContent = '⏸️ Alert dijeda... (' + count + '/' + maxAlerts + ')';
+          statusEl.textContent = '⏸️ Dijeda... (' + count + '/' + maxAlerts + ')';
           statusEl.className = 'status';
-          clearInterval(alertInterval);
+          if (alertTimer) clearTimeout(alertTimer);
+          if (progressTimer) clearInterval(progressTimer);
         }
       }
 
       function stopAlert() {
-        clearInterval(alertInterval);
-        clearInterval(timerInterval);
-        alertInterval = null;
+        if (alertTimer) clearTimeout(alertTimer);
+        if (progressTimer) clearInterval(progressTimer);
         isPaused = false;
         isDone = true;
         pauseBtn.textContent = '⏸ Pause';
         pauseBtn.disabled = true;
         stopBtn.disabled = true;
-        statusEl.textContent = '⏹️ Alert dihentikan (' + count + '/' + maxAlerts + ')';
+        statusEl.textContent = '⏹️ Dihentikan (' + count + '/' + maxAlerts + ')';
         statusEl.className = 'status done';
         progressFill.style.width = '100%';
         counterEl.textContent = count + ' / ' + maxAlerts;
@@ -351,11 +340,11 @@
       stopBtn.addEventListener('click', stopAlert);
 
       window.addEventListener('beforeunload', function() {
-        clearInterval(alertInterval);
-        clearInterval(timerInterval);
+        if (alertTimer) clearTimeout(alertTimer);
+        if (progressTimer) clearInterval(progressTimer);
       });
 
-      // Mulai otomatis
+      // Mulai
       updateUI();
       startAlert();
     })();
