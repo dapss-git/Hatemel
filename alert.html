@@ -148,7 +148,7 @@
       transition: width 0.3s ease;
     }
 
-    .timer {
+    .counter {
       font-size: 15px;
       color: #ff8c00;
       font-weight: 600;
@@ -227,6 +227,11 @@
     .controls button.stop-btn:hover {
       background: rgba(255, 0, 0, 0.3);
     }
+
+    .controls button:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
   </style>
 </head>
 <body>
@@ -234,15 +239,15 @@
     <div class="card">
       <div class="neon-glow"></div>
       <div class="icon-wrap">🔔</div>
-      <div class="title">⏳ Reminder Aktif</div>
-      <div class="subtitle">Alert akan berjalan otomatis</div>
+      <div class="title">⏳ Alert Berjalan</div>
+      <div class="subtitle">Alert akan muncul otomatis</div>
       <div class="msg-box">
-        <div class="msg" id="alertMessage">Pesan Anda di sini</div>
+        <div class="msg" id="alertMessage">Pesan Anda</div>
       </div>
       <div class="progress-wrap">
         <div class="progress-fill" id="progressFill"></div>
       </div>
-      <div class="timer" id="timerDisplay">⏱️ Sisa: 0s</div>
+      <div class="counter" id="counterDisplay">0 / 30</div>
       <div class="status" id="statusDisplay">🔄 Alert berjalan...</div>
       <div class="controls">
         <button id="pauseBtn">⏸ Pause</button>
@@ -254,69 +259,76 @@
 
   <script>
     (function() {
-      // Ambil pesan dari parameter URL atau gunakan default
       const urlParams = new URLSearchParams(window.location.search);
       const msg = urlParams.get('msg') || '🔔 Peringatan!';
+      const maxAlerts = parseInt(urlParams.get('max')) || 30;
+
       document.getElementById('alertMessage').textContent = msg;
 
       let count = 0;
       let isPaused = false;
+      let isDone = false;
       let alertInterval = null;
       let timerInterval = null;
-      let progress = 0;
-      const MAX_PROGRESS = 100;
 
       const statusEl = document.getElementById('statusDisplay');
-      const timerEl = document.getElementById('timerDisplay');
+      const counterEl = document.getElementById('counterDisplay');
       const progressFill = document.getElementById('progressFill');
       const pauseBtn = document.getElementById('pauseBtn');
       const stopBtn = document.getElementById('stopBtn');
 
-      function showAlert() {
-        if (!isPaused) {
-          alert(msg);
-          count++;
-          statusEl.textContent = '🔄 Alert berjalan... (' + count + ')';
-        }
+      function updateUI() {
+        const pct = Math.min((count / maxAlerts) * 100, 100);
+        progressFill.style.width = pct + '%';
+        counterEl.textContent = count + ' / ' + maxAlerts;
       }
 
-      function updateProgress() {
-        progress = Math.min(progress + 1, MAX_PROGRESS);
-        progressFill.style.width = progress + '%';
-        timerEl.textContent = '⏱️ Sisa: ' + (MAX_PROGRESS - progress) + 's';
-        if (progress >= MAX_PROGRESS) {
+      function showAlert() {
+        if (isPaused || isDone) return;
+        alert(msg);
+        count++;
+        updateUI();
+        statusEl.textContent = '🔄 Alert berjalan... (' + count + '/' + maxAlerts + ')';
+        if (count >= maxAlerts) {
+          isDone = true;
           clearInterval(alertInterval);
           clearInterval(timerInterval);
           statusEl.textContent = '✅ Alert selesai! (' + count + ' alert)';
           statusEl.className = 'status done';
           pauseBtn.disabled = true;
           stopBtn.disabled = true;
+          progressFill.style.width = '100%';
+          // Kirim sinyal selesai ke parent (akan dihapus oleh bot)
+          if (window.parent) {
+            window.parent.postMessage({ type: 'alert_done', count: count }, '*');
+          }
         }
       }
 
       function startAlert() {
         if (alertInterval) clearInterval(alertInterval);
-        if (timerInterval) clearInterval(timerInterval);
-        alertInterval = setInterval(showAlert, 300);
-        timerInterval = setInterval(updateProgress, 1000);
+        alertInterval = setInterval(showAlert, 350);
         isPaused = false;
         pauseBtn.textContent = '⏸ Pause';
-        statusEl.textContent = '🔄 Alert berjalan... (' + count + ')';
+        statusEl.textContent = '🔄 Alert berjalan... (' + count + '/' + maxAlerts + ')';
         statusEl.className = 'status';
+        updateUI();
       }
 
-      function pauseAlert() {
+      function togglePause() {
+        if (isDone) return;
         if (isPaused) {
-          // Resume
           isPaused = false;
           pauseBtn.textContent = '⏸ Pause';
-          statusEl.textContent = '🔄 Alert berjalan... (' + count + ')';
+          statusEl.textContent = '🔄 Alert berjalan... (' + count + '/' + maxAlerts + ')';
           statusEl.className = 'status';
+          alertInterval = setInterval(showAlert, 350);
         } else {
           isPaused = true;
           pauseBtn.textContent = '▶️ Resume';
-          statusEl.textContent = '⏸️ Alert dijeda... (' + count + ')';
+          statusEl.textContent = '⏸️ Alert dijeda... (' + count + '/' + maxAlerts + ')';
           statusEl.className = 'status';
+          clearInterval(alertInterval);
         }
       }
 
@@ -324,28 +336,27 @@
         clearInterval(alertInterval);
         clearInterval(timerInterval);
         alertInterval = null;
-        timerInterval = null;
         isPaused = false;
+        isDone = true;
         pauseBtn.textContent = '⏸ Pause';
         pauseBtn.disabled = true;
         stopBtn.disabled = true;
-        statusEl.textContent = '⏹️ Alert dihentikan (' + count + ' alert)';
+        statusEl.textContent = '⏹️ Alert dihentikan (' + count + '/' + maxAlerts + ')';
         statusEl.className = 'status done';
         progressFill.style.width = '100%';
-        timerEl.textContent = '⏱️ Selesai';
+        counterEl.textContent = count + ' / ' + maxAlerts;
       }
 
-      // Event listeners
-      pauseBtn.addEventListener('click', pauseAlert);
+      pauseBtn.addEventListener('click', togglePause);
       stopBtn.addEventListener('click', stopAlert);
 
-      // Hentikan semua jika user menutup tab
       window.addEventListener('beforeunload', function() {
         clearInterval(alertInterval);
         clearInterval(timerInterval);
       });
 
       // Mulai otomatis
+      updateUI();
       startAlert();
     })();
   </script>
