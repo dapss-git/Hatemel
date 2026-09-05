@@ -16,74 +16,74 @@
       justify-content: center;
       align-items: center;
       min-height: 100vh;
-      padding: 16px;
+      padding: 8px;
     }
     .container {
       width: 100%;
       max-width: 420px;
       margin: auto;
-      padding: 0;
     }
     .card {
       background: linear-gradient(180deg, #111118 0%, #0A0A0F 100%);
       border: 2px solid #2A2A35;
       border-radius: 18px;
-      padding: 20px;
+      padding: 14px 16px 16px;
       box-shadow: 0 0 25px rgba(0,140,255,.12);
     }
     .header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 12px;
+      margin-bottom: 8px;
     }
     .header h1 {
-      font-size: 18px;
+      font-size: 16px;
       font-weight: 900;
       color: #00A2FF;
-      letter-spacing: 1px;
+      letter-spacing: 0.5px;
       margin: 0;
     }
     .scores {
       display: flex;
-      gap: 8px;
-      font-size: 12px;
+      gap: 6px;
+      font-size: 11px;
       font-weight: 700;
     }
     .scores span {
       background: #1F1F29;
-      padding: 2px 10px;
-      border-radius: 12px;
+      padding: 0 8px;
+      border-radius: 10px;
       border: 1px solid #2E2E3A;
+      line-height: 20px;
     }
     .scores .w { color: #4ade80; }
     .scores .l { color: #f87171; }
     .scores .d { color: #fbbf24; }
     .turn {
       text-align: center;
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 600;
       color: #8A8A9E;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
     }
     .turn .hl { color: #fff; }
     .board {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
+      gap: 6px;
       aspect-ratio: 1 / 1;
       width: 100%;
       max-width: 100%;
-      margin: 0 auto 12px;
+      margin: 0 auto 8px;
     }
     .cell {
       background: #16161F;
       border: 2px solid #2E2E3A;
-      border-radius: 12px;
+      border-radius: 10px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: clamp(2rem, 8vw, 3.5rem);
+      font-size: clamp(1.8rem, 6vw, 2.8rem);
       font-weight: 900;
       cursor: pointer;
       transition: all 0.15s;
@@ -105,7 +105,7 @@
     }
     .controls {
       display: flex;
-      gap: 10px;
+      gap: 8px;
       justify-content: center;
       margin-top: 4px;
     }
@@ -113,24 +113,24 @@
       background: #1F1F29;
       border: 1px solid #2E2E3A;
       border-radius: 10px;
-      padding: 10px 16px;
+      padding: 6px 14px;
       color: #fff;
       font-weight: 700;
-      font-size: 14px;
+      font-size: 12px;
       cursor: pointer;
       transition: 0.15s;
       flex: 1;
-      max-width: 120px;
+      max-width: 100px;
     }
     .controls button:active { transform: scale(0.94); }
     .controls .reset { background: rgba(255,0,128,0.12); border-color: rgba(255,0,128,0.2); color: #ff6b9d; }
     .controls .new { background: rgba(0,170,255,0.12); border-color: rgba(0,170,255,0.2); color: #6bc8ff; }
     .status {
       text-align: center;
-      font-size: 13px;
+      font-size: 12px;
       color: #8A8A9E;
-      margin-top: 12px;
-      min-height: 20px;
+      margin-top: 8px;
+      min-height: 18px;
     }
     .status .result { font-weight: 700; color: #fff; animation: pop 0.3s ease; }
     @keyframes pop {
@@ -140,23 +140,23 @@
     }
     .footer {
       text-align: center;
-      font-size: 10px;
+      font-size: 9px;
       color: #445;
-      margin-top: 14px;
+      margin-top: 10px;
       border-top: 1px solid #1a1a2a;
-      padding-top: 12px;
+      padding-top: 8px;
     }
     @media (max-width: 480px) {
-      .container { max-width: 100%; padding: 0 8px; }
-      .card { padding: 16px; }
-      .cell { font-size: clamp(1.8rem, 7vw, 2.8rem); }
-      .header h1 { font-size: 16px; }
-      .scores { font-size: 11px; gap: 6px; }
-      .controls button { font-size: 12px; padding: 8px 12px; max-width: 100px; }
+      .container { max-width: 100%; padding: 0 4px; }
+      .card { padding: 10px 12px 12px; }
+      .cell { font-size: clamp(1.4rem, 5vw, 2.2rem); }
+      .header h1 { font-size: 14px; }
+      .scores { font-size: 10px; gap: 4px; }
+      .controls button { font-size: 11px; padding: 5px 10px; max-width: 80px; }
     }
     @media (max-width: 380px) {
-      .cell { font-size: clamp(1.4rem, 6vw, 2rem); }
-      .controls button { font-size: 11px; padding: 6px 10px; max-width: 80px; }
+      .cell { font-size: clamp(1rem, 4vw, 1.6rem); }
+      .controls button { font-size: 10px; padding: 4px 8px; max-width: 70px; }
     }
   </style>
 </head>
@@ -202,7 +202,7 @@
       if (audioCtx.state === 'suspended') audioCtx.resume().catch(()=>{});
       return audioCtx;
     }
-    function playTone(freq, dur, type='sine', vol=0.12) {
+    function playTone(freq, dur, type='sine', vol=0.10) {
       const ctx = getAudio();
       if (!ctx) return;
       try {
@@ -218,10 +218,10 @@
         osc.stop(ctx.currentTime + dur);
       } catch(e) {}
     }
-    function sndClick() { playTone(600, 0.08, 'square', 0.08); }
-    function sndWin() { [523,659,784].forEach((f,i)=>setTimeout(()=>playTone(f,0.15,'sine',0.12), i*100)); }
-    function sndLose() { [392,330,262].forEach((f,i)=>setTimeout(()=>playTone(f,0.2,'sawtooth',0.10), i*120)); }
-    function sndDraw() { [440,440,440].forEach((f,i)=>setTimeout(()=>playTone(f,0.12,'square',0.08), i*80)); }
+    function sndClick() { playTone(600, 0.06, 'square', 0.07); }
+    function sndWin() { [523,659,784].forEach((f,i)=>setTimeout(()=>playTone(f,0.12,'sine',0.10), i*80)); }
+    function sndLose() { [392,330,262].forEach((f,i)=>setTimeout(()=>playTone(f,0.15,'sawtooth',0.08), i*100)); }
+    function sndDraw() { [440,440,440].forEach((f,i)=>setTimeout(()=>playTone(f,0.10,'square',0.07), i*60)); }
 
     // DOM
     const cells = document.querySelectorAll('.cell');
@@ -316,14 +316,13 @@
       setTimeout(() => {
         if (!gameActive) return;
         aiMove();
-      }, 300);
+      }, 250);
     }
 
     function aiMove() {
       if (!gameActive) return;
       let best = null;
 
-      // Win
       for (let i=0; i<9; i++) {
         if (board[i] === null) {
           board[i] = 'O';
@@ -332,7 +331,6 @@
           if (r && r.winner === 'O') { best = i; break; }
         }
       }
-      // Block
       if (best === null) {
         for (let i=0; i<9; i++) {
           if (board[i] === null) {
@@ -343,9 +341,7 @@
           }
         }
       }
-      // Center
       if (best === null && board[4] === null) best = 4;
-      // Random
       if (best === null) {
         const empty = board.map((v,i) => v === null ? i : null).filter(v => v !== null);
         if (empty.length) best = empty[Math.floor(Math.random() * empty.length)];
