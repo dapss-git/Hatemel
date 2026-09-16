@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>YTPlay</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      background: #0f0f0f;
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .container {
+      width: 92%;
+      max-width: 600px;
+      background: #181818;
+      padding: 25px;
+      border-radius: 20px;
+      box-shadow: 0 10px 40px rgba(0,0,0,.5);
+    }
+
+    h1 {
+      text-align: center;
+      margin: 0 0 20px;
+    }
+
+    .input-box {
+      display: flex;
+      gap: 8px;
+    }
+
+    input {
+      flex: 1;
+      padding: 14px;
+      border: none;
+      outline: none;
+      border-radius: 10px;
+      background: #292929;
+      color: white;
+    }
+
+    button {
+      padding: 14px 18px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      background: #ff0033;
+      color: white;
+      font-weight: bold;
+    }
+
+    button:hover {
+      opacity: .85;
+    }
+
+    #player {
+      margin-top: 20px;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      border-radius: 14px;
+      overflow: hidden;
+      background: #000;
+    }
+
+    #player iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
+    .controls {
+      display: flex;
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    .controls button {
+      flex: 1;
+      background: #292929;
+    }
+
+    .status {
+      margin-top: 15px;
+      text-align: center;
+      color: #aaa;
+      font-size: 14px;
+    }
+
+    @media (max-width: 500px) {
+      .input-box {
+        flex-direction: column;
+      }
+
+      button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <h1>🎵 YTPlay</h1>
+
+    <div class="input-box">
+      <input
+        id="youtubeUrl"
+        type="text"
+        placeholder="Tempel link YouTube..."
+      >
+
+      <button onclick="playYouTube()">
+        PLAY
+      </button>
+    </div>
+
+    <div id="player"></div>
+
+    <div class="controls">
+      <button onclick="pauseVideo()">⏸ Pause</button>
+      <button onclick="resumeVideo()">▶️ Play</button>
+    </div>
+
+    <div class="status" id="status">
+      Masukkan link YouTube untuk mulai.
+    </div>
+
+  </div>
+
+  <script>
+    let currentVideoId = null;
+
+    function getVideoId(url) {
+      try {
+        const parsed = new URL(url);
+
+        // https://www.youtube.com/watch?v=xxxx
+        if (parsed.searchParams.has("v")) {
+          return parsed.searchParams.get("v");
+        }
+
+        // https://youtu.be/xxxx
+        if (parsed.hostname === "youtu.be") {
+          return parsed.pathname.substring(1);
+        }
+
+        // https://www.youtube.com/embed/xxxx
+        if (parsed.pathname.startsWith("/embed/")) {
+          return parsed.pathname.split("/embed/")[1];
+        }
+
+        return null;
+      } catch {
+        return null;
+      }
+    }
+
+    function playYouTube() {
+      const url = document
+        .getElementById("youtubeUrl")
+        .value
+        .trim();
+
+      const videoId = getVideoId(url);
+
+      if (!videoId) {
+        document.getElementById("status").textContent =
+          "❌ Link YouTube tidak valid.";
+        return;
+      }
+
+      currentVideoId = videoId;
+
+      document.getElementById("player").innerHTML = `
+        <iframe
+          src="https://www.youtube.com/embed/${encodeURIComponent(videoId)}?autoplay=1"
+          allow="autoplay; encrypted-media; picture-in-picture"
+          allowfullscreen>
+        </iframe>
+      `;
+
+      document.getElementById("status").textContent =
+        "▶️ Video sedang diputar.";
+    }
+
+    function pauseVideo() {
+      document.getElementById("status").textContent =
+        "⏸ Gunakan kontrol player YouTube untuk pause.";
+    }
+
+    function resumeVideo() {
+      document.getElementById("status").textContent =
+        "▶️ Gunakan kontrol player YouTube untuk melanjutkan.";
+    }
+  </script>
+
+</body>
+</html>
