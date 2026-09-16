@@ -11,67 +11,118 @@
       box-sizing: border-box;
     }
 
-    body {
+    html, body {
       margin: 0;
       min-height: 100vh;
+      width: 100%;
+    }
+
+    body {
       font-family: Arial, sans-serif;
-      background: #0f0f0f;
+      background: radial-gradient(ellipse at 50% 0%, #1a1a2e, #000);
       color: white;
       display: flex;
       justify-content: center;
-      align-items: center;
+      align-items: flex-start;
+      padding: 20px 12px;
     }
 
     .container {
-      width: 92%;
-      max-width: 600px;
-      background: #181818;
-      padding: 25px;
-      border-radius: 20px;
-      box-shadow: 0 10px 40px rgba(0,0,0,.5);
+      width: 100%;
+      max-width: 620px;
+      min-height: 720px;
+      background: linear-gradient(180deg, #181818 0%, #0f0f0f 100%);
+      padding: 28px 24px 32px;
+      border-radius: 24px;
+      box-shadow: 0 12px 50px rgba(0,0,0,.6), inset 0 1px 0 rgba(255,255,255,.05);
+      border: 1px solid rgba(255,255,255,.06);
+      display: flex;
+      flex-direction: column;
     }
 
     h1 {
       text-align: center;
-      margin: 0 0 20px;
+      margin: 0 0 8px;
+      font-size: 26px;
+      letter-spacing: 1px;
+      background: linear-gradient(135deg, #ff0033, #ff8c00);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #888;
+      font-size: 12px;
+      margin-bottom: 22px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
     }
 
     .input-box {
       display: flex;
       gap: 8px;
+      margin-bottom: 8px;
     }
 
     input {
       flex: 1;
-      padding: 14px;
-      border: none;
+      padding: 15px 16px;
+      border: 1px solid rgba(255,255,255,.08);
       outline: none;
-      border-radius: 10px;
-      background: #292929;
+      border-radius: 12px;
+      background: #222;
       color: white;
+      font-size: 14px;
+      transition: border .2s;
+    }
+
+    input:focus {
+      border-color: #ff0033;
+      box-shadow: 0 0 0 3px rgba(255,0,51,.15);
     }
 
     button {
-      padding: 14px 18px;
+      padding: 15px 22px;
       border: none;
-      border-radius: 10px;
+      border-radius: 12px;
       cursor: pointer;
-      background: #ff0033;
+      background: linear-gradient(135deg, #ff0033, #cc0029);
       color: white;
       font-weight: bold;
+      font-size: 14px;
+      letter-spacing: .5px;
+      transition: all .2s;
+      box-shadow: 0 4px 12px rgba(255,0,51,.3);
     }
 
     button:hover {
-      opacity: .85;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 18px rgba(255,0,51,.45);
+    }
+
+    button:active {
+      transform: translateY(1px);
     }
 
     #player {
       margin-top: 20px;
       width: 100%;
       aspect-ratio: 16 / 9;
-      border-radius: 14px;
+      border-radius: 16px;
       overflow: hidden;
       background: #000;
+      border: 1px solid rgba(255,255,255,.08);
+      box-shadow: 0 8px 24px rgba(0,0,0,.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #player.placeholder::before {
+      content: "🎬 Player akan muncul di sini";
+      color: #444;
+      font-size: 14px;
     }
 
     #player iframe {
@@ -83,29 +134,58 @@
     .controls {
       display: flex;
       gap: 10px;
-      margin-top: 15px;
+      margin-top: 16px;
     }
 
     .controls button {
       flex: 1;
-      background: #292929;
+      background: #222;
+      box-shadow: none;
+      font-size: 13px;
+      padding: 13px;
+    }
+
+    .controls button:hover {
+      background: #2a2a2a;
+      box-shadow: 0 0 0 1px rgba(255,255,255,.08);
     }
 
     .status {
-      margin-top: 15px;
+      margin-top: auto;
+      padding-top: 24px;
       text-align: center;
-      color: #aaa;
-      font-size: 14px;
+      color: #666;
+      font-size: 13px;
+      border-top: 1px solid rgba(255,255,255,.06);
+    }
+
+    .status b {
+      color: #fff;
+    }
+
+    .hint {
+      text-align: center;
+      color: #555;
+      font-size: 11px;
+      margin-top: 14px;
+      letter-spacing: .5px;
     }
 
     @media (max-width: 500px) {
+      .container {
+        min-height: 620px;
+        padding: 22px 18px 26px;
+      }
+
       .input-box {
         flex-direction: column;
       }
 
-      button {
+      input, button {
         width: 100%;
       }
+
+      h1 { font-size: 22px; }
     }
   </style>
 </head>
@@ -115,6 +195,7 @@
   <div class="container">
 
     <h1>🎵 YTPlay</h1>
+    <div class="subtitle">YouTube Music Player</div>
 
     <div class="input-box">
       <input
@@ -124,11 +205,11 @@
       >
 
       <button onclick="playYouTube()">
-        PLAY
+        ▶ PLAY
       </button>
     </div>
 
-    <div id="player"></div>
+    <div id="player" class="placeholder"></div>
 
     <div class="controls">
       <button onclick="pauseVideo()">⏸ Pause</button>
@@ -137,6 +218,10 @@
 
     <div class="status" id="status">
       Masukkan link YouTube untuk mulai.
+    </div>
+
+    <div class="hint">
+      🎧 Didukung semua format link YouTube
     </div>
 
   </div>
@@ -148,17 +233,14 @@
       try {
         const parsed = new URL(url);
 
-        // https://www.youtube.com/watch?v=xxxx
         if (parsed.searchParams.has("v")) {
           return parsed.searchParams.get("v");
         }
 
-        // https://youtu.be/xxxx
         if (parsed.hostname === "youtu.be") {
           return parsed.pathname.substring(1);
         }
 
-        // https://www.youtube.com/embed/xxxx
         if (parsed.pathname.startsWith("/embed/")) {
           return parsed.pathname.split("/embed/")[1];
         }
@@ -185,7 +267,9 @@
 
       currentVideoId = videoId;
 
-      document.getElementById("player").innerHTML = `
+      const player = document.getElementById("player");
+      player.classList.remove("placeholder");
+      player.innerHTML = `
         <iframe
           src="https://www.youtube.com/embed/${encodeURIComponent(videoId)}?autoplay=1"
           allow="autoplay; encrypted-media; picture-in-picture"
@@ -193,8 +277,8 @@
         </iframe>
       `;
 
-      document.getElementById("status").textContent =
-        "▶️ Video sedang diputar.";
+      document.getElementById("status").innerHTML =
+        "▶️ Sedang memutar: <b>" + videoId + "</b>";
     }
 
     function pauseVideo() {
